@@ -1,6 +1,6 @@
 import { Validator } from "../../components/validator.js";
 import { userRegisterDtoInSchema } from "../../api/validation-types/user/register.js";
-import { PasswordHandler } from "../../components/password-handler.js";
+import { PasswordService } from "../../components/password-service.js";
 import { userDao } from "../../dao/user-dao.js";
 import { DuplicateKeyError } from "../../dao/mongo-dao.js";
 import { UserAlreadyExists } from "../../api/errors/user/register.js";
@@ -10,7 +10,7 @@ export async function userRegisterHandler(unsafeDtoIn) {
 
   const { password, ...userProperties } = dtoIn;
 
-  const passwordHash = await PasswordHandler.hashPassword(password);
+  const passwordHash = await PasswordService.hashPassword(password);
 
   const userObject = {
     ...userProperties,

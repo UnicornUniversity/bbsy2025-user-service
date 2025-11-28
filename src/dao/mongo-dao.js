@@ -45,6 +45,11 @@ export class MongoDao {
     }
   }
 
+  async findOne(filter) {
+    const col = await this.getCollection();
+    return await col.findOne(filter);
+  }
+
   async getCollection() {
     return await getCollection(this.collectionName);
   }

@@ -17,6 +17,10 @@ class UserDao extends MongoDao {
   }
 
   _beforeReturn(dbObject, redact = true) {
+    if (!dbObject) {
+      return dbObject;
+    }
+
     const { _id, ...rest } = dbObject;
 
     if (redact) {
@@ -36,6 +40,12 @@ class UserDao extends MongoDao {
       ...userObject,
       _id: result.insertedId,
     });
+  }
+
+  async getByEmail(email, redact = true) {
+    const result = await super.findOne({ email });
+
+    return this._beforeReturn(result, redact);
   }
 }
 

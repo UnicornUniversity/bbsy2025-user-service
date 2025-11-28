@@ -1,6 +1,6 @@
 import * as argon2 from "argon2";
 
-export class PasswordHandler {
+export class PasswordService {
   /**
    * @param {string} password 
    * @returns {Promise<string>} password hash
