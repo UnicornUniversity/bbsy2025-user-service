@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { userRegisterHandler } from "../../abl/user/register.js";
+import { appInitHandler } from "../../abl/app/init.js";
 import { adaptAbl } from "../../components/controller-adapter.js";
 
 export const router = Router();
 
-router.post("/register", adaptAbl(userRegisterHandler));
+router.post("/init", adaptAbl(appInitHandler));

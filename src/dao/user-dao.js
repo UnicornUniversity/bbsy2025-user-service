@@ -1,22 +1,42 @@
-import { MongoClient } from "mongodb";
+import { getCollection, MongoDao } from "./mongo-dao.js";
 
-const DATABASE_URL = "mongodb://localhost:27018/user-service?directConnection=true";
+/**
+ * @type {import("mongodb").IndexDescription[]}
+ */
+const INDEXES = [{ key: { email: 1 }, unique: true, name: "email_1" }];
 
-const client = new MongoClient(DATABASE_URL, {});
+class UserDao extends MongoDao {
+  constructor() {
+    super("user");
+  }
 
-await client.connect();
+  async createSchema() {
+    const col = await this.getCollection();
 
-export class UserDao {
-  static async create(userObject) {
-    try {
-      const result = await client
-        .db()
-        .collection("users")
-        .insertOne(userObject);
-      return await client
-        .db()
-        .collection("users")
-        .findOne({ _id: result.insertedId });
-    } catch (e) {}
+    return await col.createIndexes(INDEXES);
+  }
+
+  _beforeReturn(dbObject, redact = true) {
+    const { _id, ...rest } = dbObject;
+
+    if (redact) {
+      delete rest.passwordHash;
+    }
+
+    return {
+      id: _id.toString(),
+      ...rest,
+    };
+  }
+
+  async create(userObject) {
+    const result = await super.insertOne(userObject);
+
+    return this._beforeReturn({
+      ...userObject,
+      _id: result.insertedId,
+    });
   }
 }
+
+export const userDao = new UserDao();

@@ -2,7 +2,7 @@ import { EndpointError } from "../api/errors/common.js";
 
 export function errorHandler(err, req, res, next) {
   if (res.headersSent) {
-    next(err);
+    return next(err);
   }
 
   if (err instanceof EndpointError) {
