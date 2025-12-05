@@ -63,15 +63,15 @@ export function jwtHandler(req, res, next) {
   return next();
 }
 
-class Identity {
-  contructor({ email, id, name, token }) {
+export class Identity {
+  constructor({ email, id, name, token }) {
     this.email = email;
     this.id = id;
     this.name = name;
     this.token = token;
   }
 
-  static get anonymous() {
+  static get anonymousIdentity() {
     return anonymousIdentity;
   }
 }

@@ -4,6 +4,7 @@ import { PasswordService } from "../../components/password-service.js";
 import { userDao } from "../../dao/user-dao.js";
 import { DuplicateKeyError } from "../../dao/mongo-dao.js";
 import { UserAlreadyExists } from "../../api/errors/user/register.js";
+import { Profiles } from "../../api/profiles.js";
 
 export async function userRegisterHandler(unsafeDtoIn) {
   const dtoIn = Validator.validateDtoIn(userRegisterDtoInSchema, unsafeDtoIn);
@@ -15,6 +16,7 @@ export async function userRegisterHandler(unsafeDtoIn) {
   const userObject = {
     ...userProperties,
     passwordHash,
+    profiles: [Profiles.user],
   };
 
   let createdUser;

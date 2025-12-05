@@ -1,7 +1,8 @@
 import z from "zod";
+import { nameSchema, passwordSchema } from "../common.js";
 
 export const userRegisterDtoInSchema = z.object({
   email: z.email(),
-  name: z.string().min(2).max(64),
-  password: z.string().min(8).max(256),
+  name: nameSchema,
+  password: passwordSchema,
 });

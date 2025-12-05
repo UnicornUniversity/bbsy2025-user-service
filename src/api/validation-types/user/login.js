@@ -1,6 +1,7 @@
 import z from "zod";
+import { passwordSchema } from "../common.js";
 
 export const userLoginDtoInSchema = z.object({
   email: z.email(),
-  password: z.string().min(8).max(256)
+  password: passwordSchema
 });

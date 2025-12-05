@@ -1,4 +1,5 @@
-import { getCollection, MongoDao } from "./mongo-dao.js";
+import { ObjectId } from "mongodb";
+import { MongoDao } from "./mongo-dao.js";
 
 /**
  * @type {import("mongodb").IndexDescription[]}
@@ -46,6 +47,12 @@ class UserDao extends MongoDao {
     const result = await super.findOne({ email });
 
     return this._beforeReturn(result, redact);
+  }
+
+  async getById(id) {
+    const result = await super.findOne({ _id: new ObjectId(id) });
+
+    return this._beforeReturn(result);
   }
 }
 
