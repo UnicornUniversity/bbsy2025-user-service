@@ -50,6 +50,38 @@ export class MongoDao {
     return await col.findOne(filter);
   }
 
+  async list(filter, pageInfo) {
+    const pageSize = pageInfo?.pageSize ?? 1000;
+    const pageIndex = pageInfo?.pageIndex ?? 0;
+
+    const col = await this.getCollection();
+    const [result] = await col
+      .aggregate([
+        { $match: filter },
+        {
+          $facet: {
+            itemList: [{ $skip: pageSize * pageIndex }, { $limit: pageSize }],
+            pageInfo: [{ $count: "total" }],
+          },
+        },
+      ])
+      .toArray();
+
+    const {
+      itemList,
+      pageInfo: [{ total }],
+    } = result;
+
+    return {
+      itemList,
+      pageInfo: {
+        pageSize,
+        pageIndex,
+        total,
+      },
+    };
+  }
+
   async getCollection() {
     return await getCollection(this.collectionName);
   }

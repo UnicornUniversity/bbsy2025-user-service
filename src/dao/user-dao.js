@@ -34,6 +34,13 @@ class UserDao extends MongoDao {
     };
   }
 
+  _beforeReturnList(dbObjects) {
+    return dbObjects.map(({ _id, passwordHash, ...rest }) => ({
+      id: _id.toString(),
+      ...rest,
+    }));
+  }
+
   async create(userObject) {
     const result = await super.insertOne(userObject);
 
@@ -53,6 +60,18 @@ class UserDao extends MongoDao {
     const result = await super.findOne({ _id: new ObjectId(id) });
 
     return this._beforeReturn(result);
+  }
+
+  async list(pageInfo) {
+    const { itemList, pageInfo: resultPageInfo } = await super.list(
+      {},
+      pageInfo
+    );
+
+    return {
+      itemList: this._beforeReturnList(itemList),
+      pageInfo: resultPageInfo,
+    };
   }
 }
 

@@ -5,7 +5,7 @@ export const adaptAbl = (ablFn) => async (req, res, next) => {
   }
 
   try {
-    const result = await ablFn(req.body, useCaseContext);
+    const result = await ablFn(req.body ?? req.query, useCaseContext);
     res.json(result);
   } catch (err) {
     next(err);

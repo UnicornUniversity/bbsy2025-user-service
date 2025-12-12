@@ -3,6 +3,7 @@ import { router as userRouter } from "./src/api/controllers/user-controller.js";
 import { router as appRouter } from "./src/api/controllers/app-controller.js";
 import { errorHandler } from "./src/components/error-handler.js";
 import { jwtHandler } from "./src/components/jwt-handler.js";
+import { queryHandler } from "./src/components/query-handler.js";
 
 const PORT = 3001;
 
@@ -15,6 +16,7 @@ app.use((req, res, next) => {
 
 app.use(jwtHandler);
 app.use(express.json());
+app.use(queryHandler);
 
 app.use("/app", appRouter);
 app.use("/user", userRouter);
